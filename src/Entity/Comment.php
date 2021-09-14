@@ -48,6 +48,10 @@ class Comment
      */
     private $photoFilename;
 
+    public function __toString()
+    {
+        return $this->email;
+    }
 
     
     public function getId(): ?int

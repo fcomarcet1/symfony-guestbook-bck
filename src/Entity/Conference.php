@@ -47,6 +47,11 @@ class Conference
     }
 
 
+    public function __toString()
+    {
+        return $this->city  .' '. $this->year;
+    }
+
     
     public function getId(): ?int
     {
@@ -77,14 +82,14 @@ class Conference
         return $this;
     }
 
-    public function getIsinternational(): ?bool
+    public function getIsInternational(): ?bool
     {
-        return $this->isinternational;
+        return $this->isInternational;
     }
 
-    public function setIsinternational(bool $isinternational): self
+    public function setIsInternational(bool $isInternational): self
     {
-        $this->isinternational = $isinternational;
+        $this->isInternational = $isInternational;
 
         return $this;
     }

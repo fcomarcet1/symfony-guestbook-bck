@@ -44,7 +44,7 @@ final class Version20210914155510 extends AbstractMigration
             id INT NOT NULL, 
             city VARCHAR(255) NOT NULL, 
             year VARCHAR(4) NOT NULL, 
-            is_international BOOLEAN NOT NULL, 
+            is_International BOOLEAN NOT NULL, 
             PRIMARY KEY(id)
         )');
         
