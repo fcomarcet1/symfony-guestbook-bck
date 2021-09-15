@@ -1,12 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Homepage{% endblock %}
+{% block title %}Conference GuestBook{% endblock %}
 
 {% block body %}
-<style></style>
+    <h1>Welcome to Conference GuestBook!</h1>
+    
+    <!-- Conferences list -->
+    <h2>Conferences List</h2>
+    {% for conference in conferences %}
+        <h4>{{conference}}</h4>
+    {% endfor %}
 
-<div class="example-wrapper">
-    <h1>Hello to Conference GuestBook!</h1>
-    <img src="/images/under-construction.gif" />
-</div>
 {% endblock %}
