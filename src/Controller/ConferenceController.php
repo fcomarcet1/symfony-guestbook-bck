@@ -38,7 +38,9 @@ class ConferenceController extends AbstractController
         $conferences = $this->conferenceRepository->findAll();
 
         return new Response(
-            $this->twig->render('conference/index.html.twig', ['conferences' => $conferences])
+            $this->twig->render('conference/index.html.twig', [
+                'conferences' => $conferences
+            ])
         );
     }
 
@@ -52,9 +54,12 @@ class ConferenceController extends AbstractController
 
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $this->commentRepository->getCommentPaginator($conference, $offset);
+        $conferences = $this->conferenceRepository->findAll();
 
         return new Response(
             $this->twig->render('conference/show.html.twig', [
+
+                'conferences' => $conferences, // needed for header in base twig tamplate
                 'conference' => $conference,
                 'comments' => $paginator,
                 'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
