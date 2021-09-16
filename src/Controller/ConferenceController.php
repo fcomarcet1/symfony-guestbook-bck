@@ -29,6 +29,8 @@ class ConferenceController extends AbstractController
     }
 
     /**
+     * Get list of all conferences.
+     * 
      * @Route("/", name="homepage")
      */
     public function index(): Response
@@ -47,7 +49,6 @@ class ConferenceController extends AbstractController
      */
     public function show(Request $request, Conference $conference): Response
     {
-
 
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $this->commentRepository->getCommentPaginator($conference, $offset);
