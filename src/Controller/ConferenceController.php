@@ -41,6 +41,8 @@ class ConferenceController extends AbstractController
     }
 
     /**
+     * Get conference detail.
+     * 
      * @Route("/conference/{id}", name="conference")
      */
     public function show(Request $request, Conference $conference): Response
