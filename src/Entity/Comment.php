@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,12 +17,12 @@ class Comment
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $author;
+    private string $author;
 
     /**
      * @ORM\Column(type="text")
@@ -31,12 +32,12 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
@@ -47,7 +48,7 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $photoFilename;
+    private string $photoFilename;
 
     public function __toString()
     {
@@ -55,7 +56,7 @@ class Comment
     }
 
     
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -89,11 +90,14 @@ class Comment
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email): void
     {
-        $this->email = $email;
+        if (!\filter_var($email, \FILTER_VALIDATE_EMAIL)) {
+            throw new \LogicException('Invalid email');
+        }
 
-        return $this;
+        /* $this->email = $email;
+        return $this; */
     }
 
     public function getCreatedAt(): ?\DateTimeInterface

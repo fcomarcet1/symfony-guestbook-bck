@@ -37,7 +37,7 @@ class Conference
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="conference", orphanRemoval=true)
      */
-    private $comments;
+    private  $comments;
 
 
     
