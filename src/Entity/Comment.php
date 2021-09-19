@@ -48,7 +48,9 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $photoFilename;
+    private ?string $photoFilename;
+
+
 
     public function __toString()
     {
@@ -90,14 +92,14 @@ class Comment
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(string $email): self
     {
         if (!\filter_var($email, \FILTER_VALIDATE_EMAIL)) {
             throw new \LogicException('Invalid email');
-        }
+        } 
 
-        /* $this->email = $email;
-        return $this; */
+        $this->email = $email;
+        return $this; 
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
