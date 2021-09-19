@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommentRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -21,16 +23,20 @@ class Comment
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private string $author;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $text;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private string $email;
 
@@ -54,7 +60,7 @@ class Comment
 
     public function __toString()
     {
-        return $this->email;
+        return (string) $this->email;
     }
 
     
