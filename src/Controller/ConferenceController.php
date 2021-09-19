@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\SpamChecker;
 use Twig\Environment;
 use App\Entity\Comment;
 use App\Entity\Conference;
@@ -60,7 +61,12 @@ class ConferenceController extends AbstractController
      * 
      * @Route("/conference/{slug}", name="conference")
      */
-    public function show(Request $request, Conference $conference, string $photoDir): Response
+    public function show(
+        Request $request, 
+        Conference $conference, 
+        string $photoDir,
+        SpamChecker $spamChecker
+    ): Response
     {
 
         $comment = new Comment();
@@ -80,6 +86,18 @@ class ConferenceController extends AbstractController
                     $this->logger->warning(\sprintf('File %s could not be stored in %s', $filename, $photoDir));
                 }
                 $comment->setPhotoFilename($filename);
+            }
+
+            // check comment if is spam
+            $context = [
+                'user_ip' => $request->getClientIp(),
+                'user_agent' => $request->headers->get('user-agent'),
+                'referrer' => $request->headers->get('referer'),
+                'permalink' => $request->getUri(),
+            ];
+            if (2 === $spamChecker->getSpamScore($comment, $context) ||
+                1 === $spamChecker->getSpamScore($comment, $context) ) {
+                throw new \RuntimeException('Blatant spam, go wow classic to boost, go away!');
             }
 
             $this->entityManager->persist($comment);
