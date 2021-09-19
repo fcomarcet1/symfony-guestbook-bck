@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
+use DateTimeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -43,7 +44,7 @@ class Comment
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTime $createdAt;
+    private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
