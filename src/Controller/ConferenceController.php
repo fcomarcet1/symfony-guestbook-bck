@@ -33,9 +33,10 @@ class ConferenceController extends AbstractController
         LoggerInterface $logger
     ) {
         $this->conferenceRepository = $conferenceRepository;
-        $this->commentRepository = $commentRepository;
-        $this->twig = $twig;
-        $this->entityManager  = $entityManager;
+        $this->commentRepository    = $commentRepository;
+        $this->twig                 = $twig;
+        $this->entityManager        = $entityManager;
+        $this->logger               = $logger;
     }
 
     /**
