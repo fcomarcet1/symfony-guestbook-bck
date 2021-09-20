@@ -19,6 +19,7 @@ easy_admin:
                     - id
                     - author
                     - { property: 'email', type: 'email' }
+                    - state
                     - { property: 'photoFilename', type: 'image', 'base_path': "/uploads/photos", label: 'Photo'}
                     - { property: 'createdAt', type: 'datetime' }
                 sort: ['createdAt', 'ASC']
@@ -30,4 +31,5 @@ easy_admin:
                     - 'author'
                     - { property: 'email', type: 'email' }
                     - text
+                    - state
         
