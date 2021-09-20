@@ -57,6 +57,13 @@ class Comment
      */
     private ?string $photoFilename;
 
+    /**
+     * State for comments: submitted, spam and published.
+     * 
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $state = 'submitted';
+
 
 
     public function __toString()
@@ -150,6 +157,18 @@ class Comment
     public function setPhotoFilename(?string $photoFilename): self
     {
         $this->photoFilename = $photoFilename;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): self
+    {
+        $this->state = $state;
 
         return $this;
     }
