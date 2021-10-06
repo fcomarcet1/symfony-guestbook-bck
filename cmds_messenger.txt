@@ -1,4 +1,16 @@
-symfony console messenger:consume async -vv
+-Consumir mensaje messenger:
+    symfony console messenger:consume async -vv
 
-- 2º plano:
+-Consumir en 2º plano:
     symfony run -d --watch=config,src,templates,vendor symfony console messenger:consume async
+
+-Usando symfony server:log los registros generados se unirán a todos los demás registros procedentes de PHP, 
+el servidor web y la aplicación:
+    symfony server:log
+
+-Utiliza el comando server:status para listar todos los workers en segundo plano pertenecientes al proyecto actual:
+    symfony server:status
+
+-Para detener a un worker, detén el servidor web o mata el proceso que tiene el PID que se muestra con el comando 
+    server:status
+    kill PID
