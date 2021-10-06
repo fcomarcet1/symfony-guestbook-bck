@@ -8,6 +8,7 @@ use App\Entity\Comment;
 use App\Entity\Conference;
 use Psr\Log\LoggerInterface;
 use App\Form\CommentFormType;
+use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ConferenceController extends AbstractController
 {
@@ -25,19 +27,22 @@ class ConferenceController extends AbstractController
     private Environment $twig;
     private EntityManagerInterface $entityManager;
     private LoggerInterface $logger;
+    private MessageBusInterface $messageBus;
 
     public function __construct(
         ConferenceRepository $conferenceRepository,
         CommentRepository $commentRepository, 
         Environment $twig,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        MessageBusInterface $messageBus
     ) {
         $this->conferenceRepository = $conferenceRepository;
         $this->commentRepository    = $commentRepository;
         $this->twig                 = $twig;
         $this->entityManager        = $entityManager;
         $this->logger               = $logger;
+        $this->messageBus           = $messageBus;
     }
 
     /**
@@ -61,14 +66,8 @@ class ConferenceController extends AbstractController
      * 
      * @Route("/conference/{slug}", name="conference")
      */
-    public function show(
-        Request $request, 
-        Conference $conference, 
-        string $photoDir,
-        SpamChecker $spamChecker
-    ): Response
+    public function show(Request $request, Conference $conference, string $photoDir): Response
     {
-
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
@@ -88,6 +87,9 @@ class ConferenceController extends AbstractController
                 $comment->setPhotoFilename($filename);
             }
 
+            $this->entityManager->persist($comment);
+            $this->entityManager->flush(); 
+
             // check comment if is spam
             $context = [
                 'user_ip' => $request->getClientIp(),
@@ -95,14 +97,10 @@ class ConferenceController extends AbstractController
                 'referrer' => $request->headers->get('referer'),
                 'permalink' => $request->getUri(),
             ];
-            if (2 === $spamChecker->getSpamScore($comment, $context) ||
-                1 === $spamChecker->getSpamScore($comment, $context) ) {
-                throw new \RuntimeException('Blatant spam, go wow classic to boost, go away!');
-            }
 
-            $this->entityManager->persist($comment);
-            $this->entityManager->flush();
-
+            // send message
+            $this->messageBus->dispatch(new CommentMessage($comment->getId(), $context));
+        
             return $this->redirectToRoute('conference', ['slug' => $conference->getSlug()]);
         }
 
