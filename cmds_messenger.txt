@@ -1,0 +1,4 @@
+symfony console messenger:consume async -vv
+
+- 2º plano:
+    symfony run -d --watch=config,src,templates,vendor symfony console messenger:consume async

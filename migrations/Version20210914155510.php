@@ -36,7 +36,7 @@ final class Version20210914155510 extends AbstractMigration
         )');
 
         $this->addSql('CREATE INDEX IDX_COMMENT_AUTHOR ON comment (author)');
-        $this->addSql('CREATE UNIQUE INDEX IDX_COMMENT_EMAIL ON comment (email)');    
+        //$this->addSql('CREATE UNIQUE INDEX IDX_COMMENT_EMAIL ON comment (email)');    
         $this->addSql('CREATE INDEX IDX_COMMENT_CONFERENCE_ID ON comment (conference_id)');
         
         $this->addSql('CREATE TABLE conference 
